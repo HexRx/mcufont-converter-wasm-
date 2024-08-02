@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: CMake build WebAssembly using Emscripten docker image
         uses: addnab/docker-run-action@v3
         with:
@@ -43,6 +45,7 @@ jobs:
         with:
           node-version: "20"
           cache: 'npm'
+          cache-dependency-path: './web/package-lock.json'
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Restore cache
@@ -51,10 +54,10 @@ jobs:
           path: |
             .node_modules
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('./web/**/package-lock.json') }}-${{ hashFiles('./web/**.[jt]s', './web/**.[jt]sx') }}
+          key: ${{ runner.os }}-nodejs-${{ hashFiles('./web/**/package-lock.json') }}-${{ hashFiles('./web/**.[jt]s', './web/**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('./web/**/package-lock.json') }}-
+            ${{ runner.os }}-nodejs-${{ hashFiles('./web/**/package-lock.json') }}-
       - name: Install dependencies
         working-directory: ${{github.workspace}}/web
         run: npm i

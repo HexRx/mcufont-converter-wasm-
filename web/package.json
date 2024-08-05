@@ -4,7 +4,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"postbuild": "sed -i -e \"s|assets|$ASSETS_URL|g\" dist/*.html dist/assets/*.js"
 	},
 	"dependencies": {
 		"preact": "^10.20.0",

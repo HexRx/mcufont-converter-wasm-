@@ -22,6 +22,7 @@ concurrency:
 
 env:
   BUILD_TYPE: Release
+  ASSETS_URL: ${{ vars.ASSETS_URL }}
 
 jobs:
   # Build job

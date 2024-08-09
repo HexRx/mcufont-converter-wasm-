@@ -5,7 +5,6 @@ import './style.scss';
 import createWasmModule from './wasm_module/mcufont_converter';
 
 export function App() {
-	let Module: Object;
 	const ARRAY_RESULT_SIZE = 2;
 
 	const [resultFontSize, setResultFontSize] = useState<number>(14);
@@ -22,9 +21,9 @@ export function App() {
 
 	useEffect(() => {
 		createWasmModule().then((module) => {
-			Module = module;
+			window.Module = module;
 		});
-	});
+	}, []);
 
 	function downloadURL(data: string, fileName: string) {
 		const a = document.createElement('a');

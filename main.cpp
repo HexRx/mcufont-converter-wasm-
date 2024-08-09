@@ -128,11 +128,11 @@ extern "C" int get_result_height()
 std::string datafile_s;
 
 EMSCRIPTEN_KEEPALIVE
-extern "C" array_result *import_ttf(const uint8_t *font_data, const size_t font_data_size, const uint32_t out_font_size)
+extern "C" array_result *import_ttf(const uint8_t *font_data, const size_t font_data_size, const uint32_t out_font_size, const bool monochrome)
 {
     membuf sbuf((char*)font_data, (char*)font_data + font_data_size);
     std::istream font_buf(&sbuf);
-    std::unique_ptr<mcufont::DataFile> datafile = mcufont::LoadFreetype(font_buf, out_font_size, true);
+    std::unique_ptr<mcufont::DataFile> datafile = mcufont::LoadFreetype(font_buf, out_font_size, monochrome);
 
     mcufont::rlefont::init_dictionary(*datafile);
     std::cout << __FUNCTION__ << ":Done: " << datafile->GetGlyphCount() << " unique glyphs." << std::endl;

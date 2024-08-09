@@ -11,6 +11,7 @@ export function App() {
 	const [resultFontSize, setResultFontSize] = useState<number>(14);
 	const [fontFileName, setFontFileName] = useState<string>();
 	const [dataFile, setDataFile] = useState<Uint8Array>();
+	const [monochromeModeEnabled, setMonochromeModeEnabled] = useState<boolean>(true);
 	const [optimizationEnabled, setOptimizationEnabled] = useState<boolean>(true);
 	const [optimizationIterations, setOptimizationIterations] = useState<number>(50);
 	const canvasPreviewRef = useRef();
@@ -56,7 +57,7 @@ export function App() {
 		
 		setFontImportProcessing(true);
 		
-		const resultPtr = Module._import_ttf(fileDataPtr, fileData.length, resultFontSize);
+		const resultPtr = Module._import_ttf(fileDataPtr, fileData.length, resultFontSize, monochromeModeEnabled);
 		
 		Module._free(fileDataPtr);
 		const result = new Uint32Array(Module.HEAP32.buffer, resultPtr, ARRAY_RESULT_SIZE);
@@ -151,6 +152,12 @@ export function App() {
 					<input type="number" value={resultFontSize} onChange={e => setResultFontSize(e.target.value)} />
 				</label>
 				<div>
+					<div>
+						<label title="The FT_LOAD_TARGET_MONO and FT_LOAD_MONOCHROME flags will be used">
+							<input type="checkbox" checked={monochromeModeEnabled} onChange={e => setMonochromeModeEnabled(e.target.checked)} />
+							Monochrome mode
+						</label>
+					</div>
 					<label>
 						<input type="checkbox" checked={optimizationEnabled} onChange={e => setOptimizationEnabled(e.target.checked)} />
 						Enable font optimization
@@ -183,7 +190,6 @@ export function App() {
 				<ul>
 					<li>Supports TTF fonts only</li>
 					<li>Font optimization doesn't support multi-treading</li>
-					<li>Only black and white fonts are supported</li>
 					<li>Doesn't have ability to filter glyphs</li>
 				</ul>
 			</footer>
